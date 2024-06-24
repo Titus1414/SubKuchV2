@@ -1,0 +1,48 @@
+﻿@model SubKuchV2.Models.Rider
+
+<form action="~/Riders/AddRider" method="post">
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-5">
+                <label>Rider Name</label>
+                <input type="hidden" name="Id" value="@Model.Id">
+                <input type="text" name="Name" value="@Model.Name" class=" form-control" placeholder="Name">
+            </div>
+            
+            <div class="col-md-5">
+                <label>Rider Phone</label>
+                <input type="text" name="Phone" value="@Model.Phone" class="form-control" placeholder="Phone">
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-5">
+                <label>Rider Cnic</label>
+                <input type="text" name="Cnic" value="@Model.Cnic" class=" form-control" placeholder="CNIC">
+            </div>
+           
+            <div class="col-md-5">
+                <label>Vehicle Name</label>
+                <input type="text" name="Vehical" value="@Model.Vehical" class=" form-control" placeholder="Vehical">
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-5">
+                <label>Model Number</label>
+                <input type="text" name="ModelNumber" value="@Model.ModelNumber" class=" form-control" placeholder="Vehical Model Number">
+            </div>
+            
+            <div class="col-md-5">
+                <label>Rider Password</label>
+                <input type="text" name="Password" value="@Model.Password" class="form-control" placeholder="Password">
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>

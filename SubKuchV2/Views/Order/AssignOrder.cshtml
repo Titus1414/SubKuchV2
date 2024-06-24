@@ -1,0 +1,182 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@section Css{
+    <link href="~/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="header-title mt-0 mb-1">Riders</h4>
+
+
+                    <table id="datatable-buttons" class="table table-striped dt-responsive nowrap">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>CNIC</th>
+                                <th>Vehical</th>
+                                <th>Vehical Number</th>
+                                <th>Status</th>
+                                <th>Online</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in ViewBag.Riders)
+                            {
+                                if (item.IsOnline == true)
+                                {
+                                    foreach (var i in ViewBag.OrderId)
+                                    {
+                                        <tr>
+                                            <th>@item.Name</th>
+                                            <th>@item.Phone</th>
+                                            <th>@item.Cnic</th>
+                                            <th>@item.Vehical</th>
+                                            <th>@item.ModelNumber</th>
+                                            <th>@item.Status</th>
+                                            <th>Yes</th>
+                                            <th>
+                                                <form>
+                                                    <input type="hidden" id="riderId" value="@item.Id" />
+                                                    <input type="hidden" id="orderId" value="@i.Id" />
+                                                    <button id="Submit" class="btn btn-primary">Assign</button>
+                                                </form>
+                                            </th>
+                                        </tr>
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (item.IsOnline == false)
+                                    {
+                                        foreach (var i in ViewBag.OrderId)
+                                        {
+                                            <tr>
+                                                <th>@item.Name</th>
+                                                <th>@item.Phone</th>
+                                                <th>@item.Cnic</th>
+                                                <th>@item.Vehical</th>
+                                                <th>@item.ModelNumber</th>
+                                                <th>@item.Status</th>
+                                                <th>No</th>
+                                                <th>
+                                                    <form>
+                                                        <input type="hidden" id="riderId1" value="@item.Id" />
+                                                        <input type="hidden" id="orderId1" value="@i.Id" />
+                                                        <button id="Submit1" class="btn btn-primary">Assign</button>
+                                                    </form>
+                                                </th>
+                                            </tr>
+
+                                        }
+
+                                    }
+
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+
+
+                </div> <!-- end card body-->
+            </div> <!-- end card -->
+        </div><!-- end col-->
+    </div>
+    <!-- end row-->
+    <!-- end row-->
+</div> <!-- container-fluid -->
+@section Scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/datatables.init.js"></script>
+
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script>
+
+
+    $(function () {
+        $("#Submit").click(function () {
+            var No1 = $('#riderId').val();
+            var No2 = $('#orderId').val();
+            debugger
+            $.ajax({
+                type: 'post',
+                url: '@Url.Action("AcceptedOrder", "Order")',
+                data: { 'Id': No1, 'OId': No2 },
+                contenttype: 'application/json; charset=utf-8',
+                //async: true,
+                //success: function (response) {
+                //    debugger
+                //    $("#GetCalculation").empty();
+                //    $("#GetCalculation").append(response);
+
+                /*}*/
+                })
+                });
+    });
+
+     $(function () {
+        $("#Submit1").click(function () {
+            var No3 = $('#riderId1').val();
+            var No4 = $('#orderId1').val();
+            debugger
+            $.ajax({
+                type: 'post',
+                url: '@Url.Action("AcceptedOrder", "Order")',
+                data: { 'Id': No3, 'OId': No4 },
+                contenttype: 'application/json; charset=utf-8',
+                //async: true,
+                //success: function (response) {
+                //    debugger
+                //    $("#GetCalculation").empty();
+                //    $("#GetCalculation").append(response);
+
+                /*}*/
+                })
+                });
+    });
+
+
+
+
+    @*$(function () {
+        //$("#btnViewDetail").click(function () {
+        //    var val2 = $(this).attr("data-target");
+
+        $(document).on('click', 'tr th button#Submit', function () {
+            debugger
+            var val1 = $('#riderId').val();
+            var val2 = $('#orderId').val();
+
+        $.ajax({
+            type: 'post',
+            url: '@Url.Action("AcceptedOrder", "Order")',
+          data: { 'Id': val1, 'OId' : val2 },
+            //success: function (data) {
+            //    debugger
+            //    $("#DetailsPartial").html(data);
+            //    $("#ViewDetail").modal('show');
+            //}
+        })
+    });
+    })*@
+
+
+
+</script>

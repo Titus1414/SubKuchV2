@@ -1,0 +1,324 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@section Css{
+    <link href="~/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 23px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider1 {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #430bef61;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider1:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    input:checked + .slider1 {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider1 {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider1:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider1.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+    .slider1.round:before {
+        border-radius: 50%;
+        margin-left: 25px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row page-title">
+
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="header-title mt-0 mb-1">Coupons  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add_Mdl" style="color:white ; margin-left:15px;">Create New Coupon</button></h4>
+                    <br />
+
+                    <table id="exmp" class="table table-striped dt-responsive nowrap">
+                        <thead>
+                            <tr>
+                                <th>Coupon Code</th>
+                                <th>Minimum Order</th>
+                                <th>Discounted Price</th>
+                                <th>Current Status</th>
+                                <th>Validity Date</th>
+                                <th>Created Date</th>
+
+
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+                            @foreach (var item in ViewBag.Codes)
+                            {
+                                <tr>
+                                    <th>@item.Code</th>
+                                    <th>@item.MinimumOrder</th>
+                                    <th>@item.DiscountedPrice</th>
+
+                                    <th>
+
+                                        @{
+                                            if (item.CurrentStatus == true)
+                                            {
+
+                                                <label for="myInput" class="switch">
+                                                    <input name="Vote" id="Vote" checked type="checkbox" style="display:none" />
+                                                    <a href="@Url.Action("ChangeStatus","CouponCode",new {Id=item.Id })"> <span class="slider1 round"></span> </a>
+                                                </label>
+                                            }
+                                            else
+                                            {
+                                                <label for="myInput" class="switch">
+                                                    <input name="Vote" id="Vote" type="checkbox" unchecked style="display:none" />
+                                                    <a href="@Url.Action("ChangeStatus","CouponCode",new {Id=item.Id })"> <span class="slider round"></span> </a>
+                                                </label>
+                                            }
+                                        }
+
+                                    </th>
+
+                                    <th>@item.ValidityDate</th>
+                                    <th>@item.Date</th>
+                                    <th>
+                                        <a id="RemoveCodeModal" data-target="@item.Id" title="Remove"> <i style="color:red" data-feather="trash-2"></i></a>
+
+                                    </th>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+
+                </div> <!-- end card body-->
+            </div> <!-- end card -->
+        </div><!-- end col-->
+    </div>
+</div>
+
+<div id="Remove_Mdll" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Remove Confirm </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="~/CouponCode/RemoveCode" method="post">
+                <div class="modal-body">
+                    <input type="hidden" id="RemoveCodeId" name="id" value="" />
+                    <h5> Are you sure to remove this record ? </h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-danger">Yes</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@*}*@
+
+
+<div id="Add_Mdl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Add CouponCode</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="~/CouponCode/AddCouponCode" method="post">
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Coupon Code</label>
+                            <input type="text" id="CouponCode" name="Code" class=" form-control" placeholder="Coupon Code">
+
+                        </div>
+                        <div class="col-md-6">
+                            <label>Minimum Order Amount</label>
+                            <input class="form-control" type="number" name="MinimumOrder" placeholder="Minimum Order Amount" />
+                        </div>
+                        <div class="col-md-6">
+                            <label style="margin-top:20px;">Discounted Price</label>
+                            <input class="form-control" name="DiscountedPrice" placeholder="Discounted Price " />
+                        </div>
+                        <div class="col-md-6">
+                            <label style="margin-top:20px;">Validity Date</label>
+                            <input class="form-control" type="date" name="ValidityDate" placeholder="Validity Date" />
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="Edit_mdl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Update CouponCode </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div id="EditFrm">
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+@section Scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/datatables.init.js"></script>
+
+}
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#exmp').dataTable({
+            // display everything
+            "iDisplayLength": -1,
+            "aaSorting": [[0, "desc"]] // Sort by first column descending
+        });
+    });
+
+    $(function () {
+        $(document).on('click', 'tr th a#EditCodeModal', function () {
+            debugger
+            var val1 = $(this).attr("data-target");
+        $.ajax({
+            type: 'get',
+            url: '@Url.Action("GetCouponCode", "CouponCode")',
+            data: { 'id': val1 },
+            success: function (data) {
+                debugger
+                $("#EditFrm").html(data);
+                $("#Edit_mdl").modal('show');
+            }
+        })
+    });
+})
+
+    $(function () {
+        $(document).on('click', 'tr th a#RemoveCodeModal', function () {
+            debugger
+            var val1 = $(this).attr("data-target");
+            $("#RemoveCodeId").val(val1);
+            $("#Remove_Mdll").modal('show');
+    });
+})
+
+</script>

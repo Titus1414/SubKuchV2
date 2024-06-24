@@ -1,0 +1,189 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Css{
+    <link href="~/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="header-title mt-0 mb-1">Riders</h4>
+                    <a data-toggle="modal" data-target="#Add_Mdl" style="color: white;margin-left: 15px;" class="btn btn-success">Add New</a>
+
+                    <br />
+                    <table id="datatable-buttons" class="table table-striped dt-responsive nowrap">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>CNIC</th>
+                                <th>Vehical</th>
+                                <th>Vehical Number</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.Riders)
+                            {
+                                <tr>
+                                    <th>@item.Name</th>
+                                    <th>@item.Phone</th>
+                                    <th>@item.Cnic</th>
+                                    <th>@item.Vehical</th>
+                                    <th>@item.ModelNumber</th>
+                                    <th>@item.Date</th>
+                                    <th>
+                                        <a id="EditRiderModal" data-target="@item.Id" title="Edit"><i style="color: slategray" data-feather="edit-3"></i></a>
+                                        <a id="RemoveRiderModal" data-target="@item.Id" title="Remove"> <i style="color:red" data-feather="trash-2"></i></a>
+                                    </th>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div id="Remove_Mdll" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myModalLabel">Remove Confirm </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="~/Riders/RemoveRider" method="post" enctype="multipart/form-data">
+                                    <div class="modal-body">
+                                        <input type="hidden" id="RemoveRiderId" name="id" value="" />
+                                        <h5> Are you sure to remove this record ? </h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-dismiss="modal">No</button>
+                                        <button type="submit" class="btn btn-danger">Yes</button>
+                                    </div>
+                                </form>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+
+                </div> <!-- end card body-->
+            </div> <!-- end card -->
+        </div><!-- end col-->
+    </div>
+</div>
+
+<div id="Add_Mdl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Add Rider</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="~/Riders/AddRider" method="post">
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label>Rider Name</label>
+                            <input type="text" name="Name" class=" form-control" placeholder="Name">
+                        </div>
+
+                        <div class="col-md-5">
+                            <label>Rider Phone</label>
+                            <input type="text" name="Phone" class=" form-control" placeholder="Phone">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label>Rider Cnic</label>
+                            <input type="text" name="Cnic" class=" form-control" placeholder="CNIC">
+                        </div>
+
+                        <div class="col-md-5">
+                            <label>Vehicle Type</label>
+                            <input type="text" name="Vehical" class=" form-control" placeholder="Vehical">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label>Model Number</label>
+                            <input type="text" name="ModelNumber" class=" form-control" placeholder="Vehical Model Number">
+                        </div>
+
+                        <div class="col-md-5">
+                            <label>Password</label>
+                            <input type="text" name="Password" class=" form-control" placeholder="Password">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="Edit_mdl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Update Rider </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div id="EditFrm">
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section Scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/datatables.init.js"></script>
+
+}
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script>
+    $(function () {
+        $(document).on('click', 'tr th a#EditRiderModal', function () {
+            debugger
+            var val1 = $(this).attr("data-target");
+            $.ajax({
+                type: 'get',
+                url: '@Url.Action("GetRider", "Riders")',
+                data: { 'id': val1 },
+                success: function (data) {
+                    debugger
+                    $("#EditFrm").html(data);
+                    $("#Edit_mdl").modal('show');
+                }
+            })
+        });
+    })
+    $(function () {
+        $(document).on('click', 'tr th a#RemoveRiderModal', function () {
+            debugger
+            var val1 = $(this).attr("data-target");
+            $("#RemoveRiderId").val(val1);
+            $("#Remove_Mdll").modal('show');
+        });
+    })
+
+</script>

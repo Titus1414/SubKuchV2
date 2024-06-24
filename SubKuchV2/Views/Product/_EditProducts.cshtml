@@ -1,0 +1,106 @@
+﻿@model SubKuchV2.Models.Product
+
+@*<link href="~/content/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/content/css/app.min.css" rel="stylesheet" />*@
+
+<form action="~/Product/AddProduct" method="post" enctype="multipart/form-data">
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-5">
+                <label>Stores</label>
+                <select id="BusinessId" name="BusinId" class="js-example-basic-single form-control">
+                    <option value="@ViewBag.Id">@ViewBag.Store</option>
+                    @*@foreach (var item in ViewBag.Stores)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }*@
+                </select>
+                <input name="Id" hidden value="@Model.Id" />
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-5">
+                <label>Product Category</label>
+                <select id="CatId" name="CatId" class="js-example-basic-single form-control" required>
+                    <option value="@ViewBag.CategoryId">@ViewBag.Category</option>
+
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <label>Product Name</label>
+                <input type="text" name="Product" value="@Model.Name" class=" form-control" placeholder="Product Name">
+            </div>
+
+            <div class="col-md-2"></div>
+
+            @foreach (var prc in ViewBag.Price)
+            {
+            <div class="col-md-5">
+                <label>Sale Price</label>
+                <input type="text" name="SalePrice" value="@prc.SalePrice" class=" form-control" placeholder="Sale Price">
+            </div>
+
+            <div class="col-md-5">
+                <label>Purchase Price</label>
+                <input type="text" name="PurchasePrice" value="@prc.PurchasePrice" class="form-control" placeholder="Purchase Price">
+            </div>
+
+            }
+
+            <div class="col-md-2"></div>
+
+            <div class="col-md-5">
+                <label>Product Image</label>
+                @{
+                    if (Model.Image != null)
+                    {
+                        <div class="col-md-6">
+                            <p>Old Image</p>
+                            <br>
+                            <img src="/content/images/Store/@Model.Image" id="@Model.Id" height="200" width="300" />
+                        </div>
+                    }
+                }
+                @{
+
+                    {
+                        <div class="col-md-6">
+                            <p>Upload New Image</p>
+                            <br>
+                            @*class="dropify"*@
+                            <input type="file" onchange="readURL(this);" name="image" accept="image/*">
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+
+@*<script src="~/lib/jquery/dist/jquery.js"></script>*@
+@*<script src="~/content/js/vendor.min.js"></script>
+<script src="~/content/js/app.min.js"></script>
+
+<script>
+
+    $("#BusinessId").change(function () {
+        debugger
+        var val = $('#BusinessId').find(":selected").val();
+        $.ajax({
+            type: 'get',
+            url: '@Url.Action("GetCategories", "Product")',
+            data: { 'id': val },
+            success: function (data) {
+                debugger
+                $("#CatId").html(data);
+            }
+        })
+    })
+
+</script>*@

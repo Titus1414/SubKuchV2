@@ -1,0 +1,8 @@
+﻿
+
+<option value="">Product Category</option>
+
+@foreach (var item in ViewBag.Categories)
+{
+    <option value="@item.Id">@item.Name</option>
+}

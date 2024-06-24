@@ -1,0 +1,17 @@
+﻿@model SubKuchV2.Models.Business
+
+<form action="~/Business/AddBusiness" method="post">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" id="BusinessName" name="BusinessName" value="@Model.Name" class=" form-control" placeholder="Business Name">
+                <input name="Id" hidden value="@Model.Id" />
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>

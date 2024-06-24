@@ -1,0 +1,36 @@
+﻿@model SubKuchV2.Models.CouponCode
+
+<form action="~/CouponCode/AddCouponCode" method="post">
+    <div class="modal-body">
+
+            <div class="col-md-5">
+                <label>Coupon Code</label>
+                <input type="text" name="Code" value="@Model.Code" class=" form-control" placeholder="Code">
+            </div>
+
+            <div class="col-md-5">
+                <label>Minimum Order</label>
+                <input type="text" name="MinimumOrder" value="@Model.MinimumOrder" class="form-control" placeholder="Minimum Order"> 
+            </div>
+    
+        <br />
+
+            <div class="col-md-5">
+                <label>Discounted Price</label>
+                <input type="text" name="DiscountedPrice" value="@Model.DiscountedPrice" class=" form-control" placeholder="Discounted Price">
+            </div>
+
+            <div class="col-md-5">
+                <label>Validity Date</label>
+                <input type="date" name="ValidityDate" value="@Model.ValidityDate" class=" form-control" placeholder="Validity Date">
+            </div>
+
+        <br />
+      
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>

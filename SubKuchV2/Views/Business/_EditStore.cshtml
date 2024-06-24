@@ -1,0 +1,90 @@
+﻿@model SubKuchV2.Models.Store
+
+<link href="~/content/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/content/css/app.min.css" rel="stylesheet" />
+
+<form action="~/Business/AddStore" method="post" enctype="multipart/form-data">
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-5">
+                <label>Businesses</label>
+                <select id="BusinessId" name="BusinId" class="js-example-basic-single form-control somethings">
+                    @foreach (var item in ViewBag.Business)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+
+                    @*@foreach (var item in ViewBag.Busi)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }*@
+                </select>
+                <input name="Id" hidden value="@Model.Id" />
+            </div>
+            <div class="col-md-2"></div>
+
+            <div class="col-md-5">
+                <label>Store Name</label>
+                <input type="text" name="Name" value="@Model.Name" class=" form-control" placeholder="Store Name">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <label>Location</label>
+                <input type="text" name="Location" value="@Model.Location" class=" form-control" placeholder="Location">
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-5">
+                <label>Percentage</label>
+                <input type="number" name="Percentage" value="@Model.Persentage" class=" form-control" placeholder="Percentage">
+            </div>
+
+
+            <div class="col-md-5">
+                <label>Store Image</label>
+                @{
+                    if (Model.Image != null)
+                    {
+                        <div class="col-md-6">
+                            <p>Old Image</p>
+                            <br>
+                            <img src="/content/images/Store/@Model.Image" id="@Model.Id" height="200" width="300" />
+                        </div>
+                    }
+                }
+                @{
+
+                    {
+                        <div class="col-md-6">
+                            <p>Upload New Image</p>
+                            <br>
+                            @*class="dropify"*@
+                            <input type="file" onchange="readURL(this);" name="Image" accept="image/*">
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+
+<script src="~/content/js/vendor.min.js"></script>
+<script src="~/content/js/app.min.js"></script>
+@*<script src="~/lib/jquery/dist/jquery.js"></script>*@
+<script>
+    var seen = {};
+    jQuery('.somethings').children().each(function () {
+        var txt = jQuery(this).attr('value');
+        if (seen[txt]) {
+            jQuery(this).remove();
+        } else {
+            seen[txt] = true;
+        }
+    });
+
+</script>

@@ -1,0 +1,87 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .dataTables_filter {
+        float: right;
+    }
+</style>
+@*<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />*@
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card" style="margin-top: 60px;">
+                <div class="card-body" style="margin-top: 20px;">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h4 class="header-title mt-0 mb-1">Stores</h4>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="date" id="datepicker" name="Start" placeholder="Start Date" style="width: 60%; height: 100%;" required>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="date" id="datepicker1" name="End" placeholder="End Date" style="width: 60%; height: 100%;" required>
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" id="btnClick" class="btn btn-success" style="float: left;">Get Data</button>
+                        </div>
+                    </div>
+                    <br />
+                    @*<button type="button" class="btn btn-success" style="float: left;"><a href="~/Store/AddStore" style="color:white">Add New</a></button>*@
+
+                </div> <!-- end card body-->
+            </div> <!-- end card -->
+        </div><!-- end col-->
+    </div>
+</div> <!-- container-fluid -->
+
+<div id="TblData">
+
+</div>
+
+@section Scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/datatables.init.js"></script>
+
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script>
+    $(function () {
+        $("#btnClick").click(function () {
+            debugger
+            var sdt = $("#datepicker").val();
+            var edt = $("#datepicker1").val();
+            $.ajax({
+            type: 'post',
+            url: '@Url.Action("GetPayments", "Payment")',
+            data: { 'strt': sdt, 'end': edt },
+            contenttype: 'application/json; charset=utf-8',
+                async: true,
+                success: function (data) {
+                    debugger
+                    $("#TblData").html(data);
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+            })
+        });
+    });
+
+</script>
+<script>
+    $('#datepicker').datepicker({
+        uiLibrary: 'bootstrap4'
+    });
+    $('#datepicker1').datepicker({
+        uiLibrary: 'bootstrap4'
+    });
+
+</script>

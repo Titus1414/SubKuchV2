@@ -1,0 +1,167 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Css{
+    <link href="~/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+@if (TempData["Msg"] != null)
+{
+    <div class="alert alert-cyan alert-dismissable" data-auto-dismiss role="alert">
+        <h5 style="color: #B91646; margin-bottom: 10px; font-size: 25px;">
+            @TempData["Msg"]
+        </h5>
+    </div>
+}
+
+<br />
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="header-title mt-0 mb-1">Business Information <a data-toggle="modal" data-target="#Add_Mdl" style="color: white;margin-left: 15px;" class="btn btn-success">Add New</a> </h4>
+
+                    <br />
+                    <table id="datatable-buttons" class="table table-striped dt-responsive nowrap">
+                        <thead>
+                            <tr>
+                                <th>Business Name</th>
+
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.BusinessData)
+                            {
+                                <tr>
+                                    <th>@item.Name</th>
+                                    <th>
+                                        <a id="EditBusinessModal" data-target="@item.Id" title="Edit"><i style="color: slategray" data-feather="edit-3"></i></a>
+                                        <a id="RemoveBusinessModal" data-target="@item.Id" title="Remove"> <i style="color:red" data-feather="trash-2"></i></a>
+                                    </th>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div id="Remove_Mdll" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myModalLabel">Remove Confirm </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="~/Business/RemoveBusiness" method="post" enctype="multipart/form-data">
+                                    <div class="modal-body">
+                                        <input type="hidden" id="RemoveBusinessId" name="id" value="" />
+                                        <h5> Are you sure to remove this record ? </h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-dismiss="modal">No</button>
+                                        <button type="submit" class="btn btn-danger">Yes</button>
+                                    </div>
+                                </form>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                    @*}*@
+
+                </div> <!-- end card body-->
+            </div> <!-- end card -->
+        </div><!-- end col-->
+    </div>
+</div>
+
+<div id="Add_Mdl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Add Business</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="~/Business/AddBusiness" method="post">
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" id="BusinessName" name="BusinessName" class=" form-control" placeholder="Business Name">
+                            <input name="Id" hidden value="0" />
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="Edit_mdl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Update Business </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div id="EditFrm">
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section Scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/datatables.init.js"></script>
+
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script>
+
+    $(document).on('click', 'tr th a#EditBusinessModal', function () {
+            debugger
+        var val1 = $(this).attr("data-target");
+        $.ajax({
+            type: 'get',
+            url: '@Url.Action("GetBusiness", "Business")',
+            data: { 'id': val1 },
+            success: function (data) {
+                debugger
+                $("#EditFrm").html(data);
+                $("#Edit_mdl").modal('show');
+            }
+        })
+    });
+
+    $(document).on('click', 'tr th a#RemoveBusinessModal', function () {
+            debugger
+            var val1 = $(this).attr("data-target");
+            $("#RemoveBusinessId").val(val1);
+            $("#Remove_Mdll").modal('show');
+    });
+
+    setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).remove();
+        });
+    }, 4000);
+
+</script>

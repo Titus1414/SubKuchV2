@@ -1,0 +1,31 @@
+﻿@model SubKuchV2.Models.ProductCatagory
+
+
+<form action="~/ProductCategory/AddCategory" method="post">
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-5">
+                <label>Stores</label>
+                <select id="StoreId" name="Sid" class="js-example-basic-single form-control">
+                    <option value="@Model.Sid">@ViewBag.SName</option>
+                    @foreach (var item in ViewBag.Stores)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+                <input name="Id" hidden value="@Model.Id" />
+            </div>
+            <div class="col-md-2"></div>
+
+            <div class="col-md-5">
+                <label>Product Category</label>
+                <input type="text" name="Name" value="@Model.Name" class=" form-control" placeholder="Category Name">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>

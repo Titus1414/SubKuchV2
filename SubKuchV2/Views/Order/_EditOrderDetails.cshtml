@@ -1,0 +1,344 @@
+﻿@model SubKuchV2.Models.Order
+
+@*<link href="~/content/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/content/css/app.min.css" rel="stylesheet" />*@
+
+
+<style>
+
+    .qtydiv label {
+        display: block;
+        margin-bottom: 12px;
+        letter-spacing: 2px;
+        color: #747a7b;
+    }
+
+    .qtybox {
+        border: 1px solid #ccc;
+        padding: 0 2px;
+        margin-bottom: 4px;
+    }
+
+    .qtydiv .btnqty {
+        display: inline-block;
+        cursor: pointer;
+        user-select: none;
+        font-size: 25px;
+        padding: 5px;
+        line-height: 5px;
+    }
+
+        .qtydiv .btnqty.qtyminus {
+            margin-right: 8px;
+        }
+
+        .qtydiv .btnqty.qtyplus {
+            margin-left: 8px;
+        }
+
+    .qtydiv .quantity-input {
+        border: none;
+        border: none;
+        padding: 8px;
+        text-align: center;
+        width: 50px;
+        outline: none;
+        display: inline-block;
+    }
+
+    .qtydiv {
+        display: inline-block;
+        padding-right: 15px;
+        padding-top: 10px;
+    }
+</style>
+
+
+<div class="modal-body" style="font-weight:20px">
+    @foreach (var item in ViewBag.Ord)
+    {
+
+
+        <div class="row">
+            <div class="col-md-6">
+                Customer Name:@item.CustomerName
+            </div>
+            @*<div class="col-md-6">
+                    Customer Address: <a target="_blank" href="https://www.google.com/maps/place/@item.Location">https://www.google.com/maps/place/</a>
+                </div>*@
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-6">
+                Customer Phone :@item.CustomerPhone
+            </div>
+            <!--<div class="col-md-6">
+            Address:<a target="_blank" href="https://www.google.com/maps/place/">https://www.google.com/maps/place/</a>-->
+            @*Address <input size="50" class="form-control" type="text" value="https://www.google.com/maps/place/"  />*@
+            @*Address:@item.OrderInfoVieModel.BussinessStore.StoreLocation*@
+            <!--</div>-->
+        </div>
+        foreach (var s in ViewData["join"] as IEnumerable<SubKuchV2.Models.MultiTablesJoinClass>)
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    Store Name : @s.storesList.Name
+                </div>
+
+            </div>
+        }
+
+
+    }
+    <br />
+    <div class="row">
+
+        <div class="col-md-8">
+            <p style="font-weight:bold;font-size:22px" class="pull-left">Order Detail</p>
+
+        </div>
+    </div>
+    <hr />
+
+
+    <div class="row" style="margin-bottom:3px">
+
+        <div class="col-md-2">
+
+            Name:
+
+        </div>
+        <div class="col-md-2">
+
+            Qty
+
+
+        </div>
+
+        <div class="col-md-2">
+            Unit Price(Without Discount)
+
+
+        </div>
+
+        <div class="col-md-2">
+            Unit Price(With Discount)
+
+        </div>
+
+        <div class="col-md-2">
+            NetAmount
+
+        </div>
+        <div class="col-md-2">
+            Action
+
+        </div>
+    </div>
+
+
+
+
+    @foreach (var item in ViewData["jointables"] as IEnumerable<SubKuchV2.Models.MultiTablesJoinClass>)
+    {
+        <div class="row" style="margin-bottom:3px">
+
+
+            <div class="col-md-2">
+
+                @item.productsList.Name
+
+            </div>
+            <div class="col-md-2">
+                @item.orderItemsList.Quantity
+
+            </div>
+
+            <div class="col-md-2">
+                @item.pricesList.SalePrice
+
+            </div>
+
+
+            <div class="col-md-2">
+
+                @(item.pricesList.SalePrice - item.orderPricesList.DiscountPrice)
+
+            </div>
+
+            <div class="col-md-2">
+
+                @(item.orderPricesList.TotalPrice * item.orderItemsList.Quantity)
+
+            </div>
+
+            <div class="col-md-2">
+
+                @*<a asp-action="ProductsDecrease" asp-controller="Order" asp-route-Id="@item.ordersList.Id"><img src="~/icons8-minus-50.png" style="margin-top: -17px; margin-left: -3px"></a>*@
+                <a id="btnViewDetail1" data-target="@item.ordersList.Id"><img src="~/icons8-minus-50.png" style="margin-top: -17px; margin-left: -3px"></a>
+
+
+                @*<div class="qtydiv">
+                        <div class="qtybox">
+                            <span class="btnqty qtyminus icon-dual-danger icon-minus">-</span>
+                            <input type="text" id="quantity" name="quantity" value="@item.orderItemsList.Quantity" min="0" class="quantity-selector quantity-input" readonly="">
+                            <span class="btnqty qtyplus icon-dual-dark icon-plus">+</span>
+                        </div>
+                    </div>*@
+            </div>
+            <br />
+
+        </div>
+
+    }
+    @*<div class="row">
+                <div class="col-md-8">
+                    <p style="font-weight:bold;font-size:22px" class="pull-left">Consumer Billing Detail</p>
+
+                </div>
+
+            </div>
+            <hr />
+
+
+            <div class="row">
+
+
+
+                <div class="col-md-2">
+
+                    Discount(%)
+                </div>
+                <div class="col-md-2">
+                    Delivery Charges
+
+                </div>
+                <div class="col-md-3">
+                    Discount Amount
+
+                </div>
+                <div class="col-md-2">
+                    Grand  Amount
+
+                </div>
+                <div class="col-md-3">
+                    Net  Amount
+
+                </div>
+            </div>
+
+            @foreach (var item in ViewBag.cunsumerBilling)
+            {
+                <div class="row">
+
+                    <div class="col-md-2">
+                        @item.percenatge
+
+                    </div>
+                    <div class="col-md-2">
+
+                        @item.DeliverCharges
+                    </div>
+                    <div class="col-md-3">
+                        @item.CouponDiscountedPrice
+
+                    </div>
+                    <div class="col-md-2">
+
+                        @item.GrandAmount
+                    </div>
+                    <div class="col-md-3">
+
+                        @item.Amount
+                    </div>
+
+                </div>
+            }
+
+        </div>*@
+    <!--<div id="ViewDetail" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Order Billing Information &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="font-weight:bold;font-size:25px"></span> &nbsp; &nbsp;  &nbsp; &nbsp;<span style="font-weight:bold;font-size:25px"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="font-weight:20px">
+
+                <div id="DetailsPartial">-->
+    @*<partial name="_EditOrderDetails" />*@
+    <!--</div>
+
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+
+    </div>
+
+    @*<script src="~/content/js/vendor.min.js"></script>
+    <script src="~/content/js/app.min.js"></script>*@
+    @*<script src="~/lib/jquery/dist/jquery.js"></script>*@
+
+    @*<script>
+        $(function () {
+
+            $('#btnViewDetail').click(function (e) {
+                debugger
+
+                var val2 = $(this).attr("data-target");
+                var me = $(this);
+                e.preventDefault();
+
+                if (me.data('requestRunning')) {
+                    return;
+                }
+
+                me.data('requestRunning', true);
+
+
+        $.ajax({
+        type: 'post',
+        url: '@Url.Action("ProductsDecrease", "Order")',
+        data: { 'Id': val2 },
+        success: function (data) {
+        debugger
+        $("#DetailsPartial").html(data);
+        //$("#ViewDetail").modal('show');
+        }
+        })
+        });
+        })
+
+
+            //$('#do-login').click(function (e) {
+            //    var me = $(this);
+            //    e.preventDefault();
+
+            //    if (me.data('requestRunning')) {
+            //        return;
+            //    }
+
+            //    me.data('requestRunning', true);
+
+            //    $.ajax({
+            //        type: "POST",
+            //        url: "/php/auth/login.php",
+            //        data: $("#login-form").serialize(),
+            //        success: function (msg) {
+            //            //stuffs
+            //        },
+            //        complete: function () {
+            //            me.data('requestRunning', false);
+            //        }
+            //    });
+            //});
+    </script>*@

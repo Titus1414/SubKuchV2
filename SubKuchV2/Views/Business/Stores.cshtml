@@ -1,0 +1,208 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Css{
+    <link href="~/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+
+@if (TempData["Msg"] != null)
+{
+    <div class="alert alert-cyan alert-dismissable" data-auto-dismiss role="alert">
+        <h5 style="color: #B91646; margin-bottom: 10px; font-size: 25px;">
+            @TempData["Msg"]
+        </h5>
+    </div>
+}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="header-title mt-0 mb-1">Stores<a data-toggle="modal" data-target="#Add_Mdl" style="color: white;margin-left: 15px;" class="btn btn-success">Add New</a> </h4>
+
+                    <br />
+                    <table id="Example" class="table table-striped dt-responsive nowrap">
+                        <thead>
+                            <tr>
+                                <th>Store Name</th>
+                                <th>Business</th>
+                                <th>Address</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.StoresData)
+                            {
+                                <tr>
+                                    <th>@item.Name</th>
+                                    <th>@item.BusinessName</th>
+                                    <th>@item.Location</th>
+                                    <th>@item.Date</th>
+                                    <th>
+                                        <a id="EditStoreModal" data-target="@item.Id" title="Edit"><i style="color: slategray" data-feather="edit-3"></i></a>
+                                        <a id="RemoveStoreModal" data-target="@item.Id" title="Remove"> <i style="color:red" data-feather="trash-2"></i></a>
+                                    </th>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div id="Remove_Mdll" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myModalLabel">Remove Confirm </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="~/Business/RemoveStore" method="post" enctype="multipart/form-data">
+                                    <div class="modal-body">
+                                        <input type="hidden" id="RemoveStoreId" name="id" value="" />
+                                        <h5> Are you sure to remove this record ? </h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-dismiss="modal">No</button>
+                                        <button type="submit" class="btn btn-danger">Yes</button>
+                                    </div>
+                                </form>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                </div> <!-- end card body-->
+            </div> <!-- end card -->
+        </div><!-- end col-->
+    </div>
+</div>
+
+<div id="Add_Mdl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Add Store</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="~/Business/AddStore" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label>Businesses</label>
+                            <select id="BusinessId" name="BusinId" class="js-example-basic-single form-control" required>
+                                <option value="">Select Business</option>
+                                @foreach (var item in ViewBag.Busi)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                            <input name="Id" hidden value="0" />
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-5">
+                            <label>Store Name</label>
+                            <input type="text" name="Name" class=" form-control" placeholder="Store Name" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label>Address</label>
+                            <input type="text" name="Location" class=" form-control" placeholder="Address" required>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-5">
+                            <label>Percentage</label>
+                            <input type="number" name="Percentage" class=" form-control" placeholder="Percentage" required>
+                        </div>
+
+                        <div class="col-md-5">
+                            <label>Store Image</label>
+                            <input type="file" class="dropify" name="image" accept="image/*" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="Edit_mdl" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Update Store </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div id="EditFrm">
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section Scripts{
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/datatables.init.js"></script>
+
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#Example').DataTable({
+            "pagingType": "full_numbers"
+        });
+    });
+
+    $(function () {
+        $(document).on('click', 'tr th a#EditStoreModal', function () {
+            debugger
+            var val1 = $(this).attr("data-target");
+        $.ajax({
+            type: 'get',
+            url: '@Url.Action("GetStore", "Business")',
+            data: { 'id': val1 },
+            success: function (data) {
+                debugger
+                $("#EditFrm").html(data);
+                $("#Edit_mdl").modal('show');
+            }
+        })
+    });
+})
+
+    $(function () {
+        $(document).on('click', 'tr th a#RemoveStoreModal', function () {
+            debugger
+            var val1 = $(this).attr("data-target");
+            $("#RemoveStoreId").val(val1);
+            $("#Remove_Mdll").modal('show');
+    });
+    })
+
+    setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).remove();
+        });
+    }, 4000);
+
+</script>
